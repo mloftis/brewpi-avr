@@ -97,6 +97,15 @@ void brewpiLoop(void)
 {
 	static unsigned long lastUpdate = 0;
 	uint8_t oldState;
+	
+	// millis() will wrap appx every 50 days
+	
+	if(ticks.millis() < lastUpdate) {
+		// there's room for lots of clever math and a refactor to make sure
+		// that we're not going to wait like 1.999 seconds here or something but
+		// resetting the lastUpdate to "now" is probably just fine for this
+		lastUpdate = ticks.millis();
+	}
 			
 	if(ticks.millis() - lastUpdate >= (1000)) { //update settings every second
 		lastUpdate = ticks.millis();
